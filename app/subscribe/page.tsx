@@ -84,6 +84,11 @@ export default function SubscribePage() {
           <p className="text-center text-gray-600 text-xs mt-4 flex items-center justify-center gap-1">
             <Shield size={12} /> Secured by Stripe. We never store your card.
           </p>
+          <p className="text-center text-gray-600 text-xs mt-3 leading-relaxed">
+            By subscribing, you agree to our{" "}
+            <a href="/terms" className="underline hover:text-gray-400 transition">Terms of Service</a>
+            , including our no-refund policy and 72-hour cancellation window.
+          </p>
         </div>
       </motion.div>
     </main>
