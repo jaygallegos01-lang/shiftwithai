@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { motion } from "framer-motion";
 import Link from "next/link";
@@ -37,7 +37,7 @@ const courses = [
     lessons: 5,
     progress: 0,
     unlocked: false,
-    desc: "Coming next month — invoicing, scheduling, and follow-ups automated.",
+    desc: "Coming next month â€” invoicing, scheduling, and follow-ups automated.",
   },
 ];
 
@@ -57,7 +57,7 @@ export default function DashboardPage() {
           animate={{ opacity: 1, y: 0 }}
           className="mb-12"
         >
-          <h1 className="text-4xl font-black mb-2">Welcome back. 👋</h1>
+          <h1 className="text-4xl font-black mb-2">Welcome back. ðŸ‘‹</h1>
           <p className="text-gray-400 text-lg">Pick up where you left off or start something new.</p>
         </motion.div>
 
@@ -67,7 +67,7 @@ export default function DashboardPage() {
             { label: "Lessons Completed", value: "3" },
             { label: "Hours Saved/Week", value: "~4h" },
             { label: "Courses Unlocked", value: "3" },
-            { label: "Subscription", value: "Active ✓" },
+            { label: "Subscription", value: "Active âœ“" },
           ].map((stat, i) => (
             <motion.div
               key={i}
@@ -162,7 +162,7 @@ export default function DashboardPage() {
         </motion.div>
 
         {/* Recommended Tools */}
-        <h2 className="text-2xl font-bold mb-6 mt-8">🛠️ Tools We Recommend</h2>
+        <h2 className="text-2xl font-bold mb-6 mt-8">ðŸ› ï¸ Tools We Recommend</h2>
         <div className="grid md:grid-cols-3 gap-6 mb-12">
           {[
             {
@@ -182,11 +182,11 @@ export default function DashboardPage() {
               color: "purple",
             },
             {
-              name: "Copy.ai",
-              desc: "AI writing tool built for marketing. Write ads, emails, and social posts in seconds.",
-              badge: "Save 5hrs/week",
-              cta: "Try Free",
-              url: "https://copy.ai",
+              name: "AI Prompt Pack",
+              desc: "100 copy-paste AI prompts built for small business owners. Write ads, emails, posts, and more in seconds. $27 one-time.",
+              badge: "⚡ Instant Download",
+              cta: "Get It — $27",
+              url: "https://shiftai.gumroad.com/l/dcqcgi",
               color: "green",
             },
           ].map((tool, i) => (
@@ -218,3 +218,4 @@ export default function DashboardPage() {
     </main>
   );
 }
+
