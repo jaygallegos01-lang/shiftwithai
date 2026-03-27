@@ -160,6 +160,60 @@ export default function DashboardPage() {
             View Past Issues <ArrowRight size={14} />
           </button>
         </motion.div>
+
+        {/* Recommended Tools */}
+        <h2 className="text-2xl font-bold mb-6 mt-8">🛠️ Tools We Recommend</h2>
+        <div className="grid md:grid-cols-3 gap-6 mb-12">
+          {[
+            {
+              name: "Systeme.io",
+              desc: "All-in-one platform for funnels, email marketing, and online courses. Replace 5 tools with one. Perfect for small businesses.",
+              badge: "Most Popular",
+              cta: "Try Free",
+              url: "https://systeme.io/?sa=sa026723429027172d0ffb642246d108c7e0566949",
+              color: "blue",
+            },
+            {
+              name: "ManyChat",
+              desc: "Automate your Instagram and Facebook DMs. Never miss a lead. Set it up once and it runs 24/7.",
+              badge: "Best for Social",
+              cta: "Get Started",
+              url: "https://manychat.com",
+              color: "purple",
+            },
+            {
+              name: "Copy.ai",
+              desc: "AI writing tool built for marketing. Write ads, emails, and social posts in seconds.",
+              badge: "Save 5hrs/week",
+              cta: "Try Free",
+              url: "https://copy.ai",
+              color: "green",
+            },
+          ].map((tool, i) => (
+            <motion.div
+              key={i}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.6 + i * 0.1 }}
+              className="glass-card rounded-2xl p-6 border border-[#1E1E2E] hover:border-blue-500/30 transition-all duration-300"
+            >
+              <div className="flex items-center justify-between mb-3">
+                <h3 className="font-bold text-lg">{tool.name}</h3>
+                <span className="text-xs font-bold px-2 py-1 rounded-full bg-gradient-to-r from-blue-500 to-purple-500 text-white">{tool.badge}</span>
+              </div>
+              <p className="text-gray-400 text-sm mb-4 leading-relaxed">{tool.desc}</p>
+              <a
+                href={tool.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-2 text-sm font-semibold text-blue-400 hover:text-blue-300 transition"
+              >
+                {tool.cta} <ArrowRight size={14} />
+              </a>
+            </motion.div>
+          ))}
+        </div>
+        </motion.div>
       </div>
     </main>
   );
