@@ -82,21 +82,32 @@ photo loop; the masonry handles any height automatically. Keep the brand rule:
 
 ---
 
-## Go live with real booking (replace the quote modal)
+## Booking — already wired
 
-By default, "Book" opens a quote modal that ends in a confirmation screen (no charge).
-To connect a real booking system, pick one:
+The "Book" modal **already submits real bookings** to a serverless endpoint
+(`app/api/book/route.ts`). On submit it POSTs `{ tier, dur, quote, date, type,
+name, contact }`, then shows the "You're on the grid" confirmation.
 
-- **Easiest (Calendly / Square):** in `lib/content.ts`, set
-  `config.bookingUrl = "https://calendly.com/sonoransims/booking"`. Every "Book"
-  button then opens that link directly.
-- **Embed inside the modal:** in `components/BookingModal.tsx`, find the
-  `EMBED SLOT` comment and drop your Calendly/Square widget there.
-- **Your own backend / email:** the `submit()` function in `BookingModal.tsx` already
-  assembles the `payload` object — POST it to your endpoint (Formspree, Resend, a
-  Next.js route) and keep the existing success state.
+**To start receiving bookings by email (2 minutes):**
+1. Create a free [Resend](https://resend.com) account and copy an API key.
+2. Add these env vars (locally in `.env.local`, or in Vercel → Settings → Env Vars):
+   ```
+   RESEND_API_KEY=re_xxxxxxxx
+   BOOKING_NOTIFY_EMAIL=hello@sonoransims.com
+   BOOKING_FROM=Sonoran Sims <bookings@sonoransims.com>
+   ```
+3. Verify your domain in Resend so `BOOKING_FROM` can use `@sonoransims.com`.
+   (For testing, leave `BOOKING_FROM` unset — it falls back to `onboarding@resend.dev`,
+   which delivers only to your own Resend account email.)
 
-Full notes are in the comments of `components/BookingModal.tsx`.
+Until a key is set, the site still works — bookings are logged to the server
+console (the response reports `delivered:false`) so nothing breaks before you're ready.
+
+**Prefer a calendar / deposit checkout instead?** Set `config.bookingUrl` in
+`lib/content.ts` to a Calendly or Square link and every "Book" button opens it
+directly (no env vars, no email). Or embed a widget inside the modal at the
+`EMBED SLOT` comment in `components/BookingModal.tsx`. To add Stripe/Square
+deposits later, extend the `POST` handler in `app/api/book/route.ts`.
 
 ---
 

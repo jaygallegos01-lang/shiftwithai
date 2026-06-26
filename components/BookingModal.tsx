@@ -41,6 +41,8 @@ export default function BookingModal({
   const [fName, setFName] = useState("");
   const [fContact, setFContact] = useState("");
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const [submitting, setSubmitting] = useState(false);
+  const [submitErr, setSubmitErr] = useState("");
   const panelRef = useRef<HTMLDivElement>(null);
 
   const quote = "$" + (dur === "Half day" ? PRICES[tier].half : PRICES[tier].full);
@@ -66,11 +68,12 @@ export default function BookingModal({
     return Object.keys(e).length === 0;
   }
 
-  function submit(ev: React.FormEvent) {
+  async function submit(ev: React.FormEvent) {
     ev.preventDefault();
+    setSubmitErr("");
     if (!validate()) return;
 
-    // This is the shape to POST to your booking endpoint / Calendly prefill.
+    // The shape POSTed to /api/book (also the shape a Calendly/Square prefill takes).
     const payload = {
       tier: partner ? null : tier,
       dur: partner ? null : dur,
@@ -80,9 +83,26 @@ export default function BookingModal({
       fName,
       fContact,
     };
-    // eslint-disable-next-line no-console
-    console.log("[Sonoran Sims] booking payload →", payload); // replace with real call
-    setStep("success");
+
+    setSubmitting(true);
+    try {
+      const res = await fetch("/api/book", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({}));
+        throw new Error(data.error || "Something went wrong.");
+      }
+      setStep("success"); // success card echoes tier · dur · date · quote
+    } catch (err) {
+      setSubmitErr(
+        `${(err as Error).message} You can also reach us directly at hello@sonoransims.com.`
+      );
+    } finally {
+      setSubmitting(false);
+    }
   }
 
   const tierName = tiers.find((t) => t.id === tier)?.name ?? tier;
@@ -174,9 +194,14 @@ export default function BookingModal({
               {errors.fContact && <div className="field-error">{errors.fContact}</div>}
             </div>
 
-            <button type="submit" className="btn btn--flame">
-              {partner ? "Send rig inquiry" : `Reserve for ${quote}`}
+            <button type="submit" className="btn btn--flame" disabled={submitting} aria-busy={submitting}>
+              {submitting ? "Sending…" : partner ? "Send rig inquiry" : `Reserve for ${quote}`}
             </button>
+            {submitErr && (
+              <p className="field-error" role="alert" style={{ textAlign: "center", marginTop: 10 }}>
+                {submitErr}
+              </p>
+            )}
             <p className="modal__embed-note">
               No charge yet — we confirm availability, then take a deposit to lock it in.
             </p>

@@ -28,9 +28,11 @@ export const config = {
   recommendedTier: "PRO" as "STARTER" | "PRO" | "MOTION",
   // Mobile sticky "Book" bar (<820px). High-intent affordance for phone traffic.
   showStickyBar: true,
-  // Where every "Book" button points. Leave "modal" to use the built-in quote
-  // modal. To go live instantly, set to a Calendly/Square URL string and the
-  // buttons will open it in a new tab instead (see components/BookingModal).
+  // Where every "Book" button points.
+  //  - "modal"  (default): the built-in quote modal, which submits to the live
+  //    /api/book endpoint (emails the booking to you via Resend — set
+  //    RESEND_API_KEY + BOOKING_NOTIFY_EMAIL to activate; see app/api/book/route.ts).
+  //  - a URL string: buttons instead open that Calendly/Square link in a new tab.
   bookingUrl: "modal" as "modal" | (string & {}),
 };
 
