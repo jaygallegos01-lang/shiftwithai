@@ -1,0 +1,141 @@
+"use client";
+
+import { useEffect, useRef, useState } from "react";
+import Reveal from "./Reveal";
+
+/**
+ * Instant-booking affordance.
+ *
+ * Set NEXT_PUBLIC_BOOKING_URL to go live:
+ *   - a Calendly link  → renders the inline Calendly widget
+ *   - any other URL    → renders it in a responsive iframe (e.g. Square)
+ * With no URL set we show a labeled placeholder plus a preview of the
+ * Go Green instant-confirm state, so the client can see the finished flow.
+ */
+const BOOKING_URL = process.env.NEXT_PUBLIC_BOOKING_URL?.trim() || "";
+const isCalendly = /calendly\.com/i.test(BOOKING_URL);
+
+function CalendlyEmbed({ url }: { url: string }) {
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const id = "calendly-widget-script";
+    if (!document.getElementById(id)) {
+      const s = document.createElement("script");
+      s.id = id;
+      s.src = "https://assets.calendly.com/assets/external/widget.js";
+      s.async = true;
+      document.body.appendChild(s);
+    }
+    // Append brand colours to the Calendly URL so the widget matches the site.
+    const styled = new URL(url);
+    styled.searchParams.set("hide_gdpr_banner", "1");
+    styled.searchParams.set("background_color", "0E0E11");
+    styled.searchParams.set("text_color", "F5F2EC");
+    styled.searchParams.set("primary_color", "FF7A28");
+    if (ref.current) ref.current.dataset.url = styled.toString();
+  }, [url]);
+
+  return (
+    <div
+      ref={ref}
+      className="calendly-inline-widget overflow-hidden rounded-lg"
+      data-url={url}
+      style={{ minWidth: "320px", height: "660px" }}
+    />
+  );
+}
+
+export default function BookingSection() {
+  const [confirmed, setConfirmed] = useState(false);
+
+  return (
+    <section id="book" className="relative scroll-mt-20 py-24 md:py-32">
+      <div className="mx-auto max-w-4xl px-5 md:px-8">
+        <Reveal>
+          <p className="eyebrow mb-4 text-center">RESERVE YOUR DATE</p>
+          <h2 className="display text-center text-sand text-[clamp(2.4rem,6vw,4.6rem)] uppercase">
+            Ready to race? <span className="flame-text">Pick a date.</span>
+          </h2>
+          <p className="mx-auto mt-5 max-w-xl text-center text-sand/80">
+            Book online with a deposit in under two minutes. We confirm
+            instantly — no quote forms, no waiting on a callback.
+          </p>
+        </Reveal>
+
+        <Reveal>
+          <div className="mt-12">
+            {BOOKING_URL ? (
+              <div className="rounded-xl border border-sand/10 bg-ink/60 p-3 md:p-4">
+                {isCalendly ? (
+                  <CalendlyEmbed url={BOOKING_URL} />
+                ) : (
+                  <iframe
+                    title="Book your Sonoran Sims session"
+                    src={BOOKING_URL}
+                    className="h-[660px] w-full rounded-lg border-0"
+                    loading="lazy"
+                  />
+                )}
+              </div>
+            ) : confirmed ? (
+              <div
+                className="rounded-xl border p-8 text-center md:p-12"
+                style={{
+                  borderColor: "rgba(55,217,139,0.5)",
+                  background: "rgba(55,217,139,0.06)",
+                }}
+              >
+                <span
+                  className="mx-auto mb-5 grid h-14 w-14 place-items-center rounded-full"
+                  style={{ background: "rgba(55,217,139,0.15)" }}
+                >
+                  <svg width="26" height="26" viewBox="0 0 24 24" fill="none" aria-hidden>
+                    <path
+                      d="M5 13l4 4L19 7"
+                      stroke="#37D98B"
+                      strokeWidth="2.4"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                  </svg>
+                </span>
+                <p className="mono text-sm uppercase tracking-[0.2em]" style={{ color: "#37D98B" }}>
+                  Booking confirmed
+                </p>
+                <p className="mt-3 text-sand/85">
+                  You&apos;re on the grid. A confirmation and your operator&apos;s
+                  details are on the way.
+                </p>
+                <button
+                  onClick={() => setConfirmed(false)}
+                  className="btn-ghost mt-7"
+                >
+                  Reset preview
+                </button>
+              </div>
+            ) : (
+              <div className="rounded-xl border border-dashed border-flame/40 bg-ink/60 p-6 md:p-8">
+                {/* BOOKING WIDGET SLOT — set NEXT_PUBLIC_BOOKING_URL to go live */}
+                <div className="flex min-h-[300px] flex-col items-center justify-center gap-5 rounded-lg border border-sand/10 bg-asphalt/60 p-8 text-center">
+                  <p className="mono text-[0.7rem] uppercase tracking-[0.2em] text-ash">
+                    Embedded booking widget · Calendly / Square
+                  </p>
+                  <p className="max-w-sm text-sm text-sand/70">
+                    Set <span className="mono text-sand/90">NEXT_PUBLIC_BOOKING_URL</span>{" "}
+                    to your Calendly or Square link and the live date picker
+                    renders right here. The button below previews the
+                    instant-confirm state.
+                  </p>
+                  <button onClick={() => setConfirmed(true)} className="btn-flame">
+                    Preview instant confirm
+                  </button>
+                </div>
+              </div>
+            )}
+          </div>
+        </Reveal>
+      </div>
+    </section>
+  );
+}

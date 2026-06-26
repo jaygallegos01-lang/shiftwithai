@@ -1,14 +1,17 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 :root {
-  --brand-blue: #3B82F6;
-  --brand-purple: #8B5CF6;
-  --bg-dark: #0A0A0F;
-  --bg-card: #0F0F1A;
-  --border: #1E1E2E;
+  --flame: #ff7a28;
+  --amber: #ffc247;
+  --ember: #e22d17;
+  --asphalt: #0e0e11;
+  --ink: #1c1c22;
+  --sand: #f5f2ec;
+  --ash: #8b8b97;
+  --violet: #5b2d8e;
+  --go: #37d98b;
 }
 
 * {
@@ -19,56 +22,139 @@
 
 html {
   scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
 }
 
 body {
-  background: #0A0A0F;
-  color: #ffffff;
-  font-family: 'Inter', system-ui, sans-serif;
+  /* Base is night — the scroll-driven sunset sits behind everything. */
+  background-color: var(--asphalt);
+  color: var(--sand);
+  font-family: var(--font-plex-sans), "IBM Plex Sans", sans-serif;
   -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  overflow-x: hidden;
 }
 
-.gradient-text {
-  background: linear-gradient(135deg, #3B82F6 0%, #8B5CF6 100%);
+::selection {
+  background: var(--flame);
+  color: var(--asphalt);
+}
+
+/* ---- Typographic primitives ---- */
+.display {
+  font-family: var(--font-barlow), "Barlow Condensed", sans-serif;
+  font-weight: 800;
+  line-height: 0.92;
+  letter-spacing: -0.005em;
+}
+
+.eyebrow {
+  font-family: var(--font-plex-mono), "IBM Plex Mono", monospace;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.34em;
+  font-size: 0.72rem;
+  color: var(--flame);
+}
+
+.mono {
+  font-family: var(--font-plex-mono), "IBM Plex Mono", monospace;
+}
+
+.flame-text {
+  background: linear-gradient(120deg, #ffc247 0%, #ff7a28 50%, #e22d17 100%);
   -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
   background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
 }
 
-.glow-blue {
-  box-shadow: 0 0 30px rgba(59, 130, 246, 0.3);
-}
-
-.glow-purple {
-  box-shadow: 0 0 30px rgba(139, 92, 246, 0.3);
-}
-
-.glass-card {
-  background: rgba(15, 15, 26, 0.8);
-  backdrop-filter: blur(12px);
-  border: 1px solid rgba(30, 30, 46, 0.8);
-}
-
-.btn-primary {
-  background: linear-gradient(135deg, #3B82F6 0%, #8B5CF6 100%);
-  color: white;
-  font-weight: 700;
-  padding: 16px 32px;
-  border-radius: 12px;
-  transition: all 0.3s ease;
-  display: inline-block;
-  text-align: center;
-  cursor: pointer;
+/* ---- Buttons ---- */
+.btn-flame {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  font-family: var(--font-plex-mono), "IBM Plex Mono", monospace;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-size: 0.86rem;
+  color: var(--asphalt);
+  background: linear-gradient(135deg, #ffc247 0%, #ff7a28 52%, #e22d17 100%);
+  padding: 1rem 1.6rem;
+  border-radius: 4px;
   border: none;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: 0 10px 30px -10px rgba(255, 122, 40, 0.6);
 }
-
-.btn-primary:hover {
+.btn-flame:hover {
   transform: translateY(-2px);
-  box-shadow: 0 20px 40px rgba(139, 92, 246, 0.4);
+  box-shadow: 0 18px 44px -12px rgba(226, 45, 23, 0.7);
 }
 
-.section-divider {
+.btn-ghost {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  font-family: var(--font-plex-mono), "IBM Plex Mono", monospace;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-size: 0.86rem;
+  color: var(--sand);
+  background: transparent;
+  padding: 1rem 1.4rem;
+  border-radius: 4px;
+  border: 1px solid rgba(245, 242, 236, 0.22);
+  cursor: pointer;
+  transition: border-color 0.2s ease, color 0.2s ease;
+}
+.btn-ghost:hover {
+  border-color: var(--flame);
+  color: var(--flame);
+}
+
+/* ---- Surfaces ---- */
+.card {
+  background: rgba(28, 28, 34, 0.66);
+  border: 1px solid rgba(245, 242, 236, 0.08);
+  backdrop-filter: blur(10px);
+  border-radius: 8px;
+}
+
+.hairline {
   border: none;
   height: 1px;
-  background: linear-gradient(90deg, transparent, #1E1E2E, transparent);
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(245, 242, 236, 0.16),
+    transparent
+  );
+}
+
+/* Visible keyboard focus everywhere */
+a:focus-visible,
+button:focus-visible,
+[tabindex]:focus-visible {
+  outline: 2px solid var(--amber);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+/* Reduced motion — kill the orchestrated descent + shimmer */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
 }
