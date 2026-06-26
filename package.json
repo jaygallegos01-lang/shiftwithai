@@ -1,5 +1,5 @@
 {
-  "name": "shiftwithai",
+  "name": "sonoran-sims",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -9,13 +9,9 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@stripe/stripe-js": "^4.1.0",
-    "framer-motion": "^11.3.0",
-    "lucide-react": "^0.414.0",
     "next": "^16.2.1",
     "react": "^18",
-    "react-dom": "^18",
-    "stripe": "^16.2.0"
+    "react-dom": "^18"
   },
   "devDependencies": {
     "@types/node": "^20",
