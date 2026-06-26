@@ -1,105 +1,93 @@
-# ShiftWithAI
+# Sonoran Sims
 
-**$75/month AI education subscription for small business owners.**
+**Arizona's only mobile racing simulator rental.** Pro-grade sims delivered,
+set up, and run anywhere in the Phoenix Valley. Published pricing from $175.
+Any Sim, Anywhere.
 
-Built with Next.js 14, Tailwind CSS, Framer Motion, and Stripe.
+Launch website — built with Next.js 16, Tailwind CSS, and Framer Motion.
 
 ---
 
-## 🚀 Quick Start (Local)
+## Quick start
 
-### 1. Install dependencies
 ```bash
 npm install
-```
-
-### 2. Set up environment variables
-```bash
-cp .env.example .env.local
-```
-Then edit `.env.local` and add your Stripe keys (see below).
-
-### 3. Run locally
-```bash
 npm run dev
 ```
+
 Open http://localhost:3000
 
----
-
-## 💳 Stripe Setup (5 minutes)
-
-1. Go to https://dashboard.stripe.com
-2. Sign up or log in
-3. Go to **Developers → API Keys**
-4. Copy your **Publishable key** and **Secret key**
-5. Paste them into `.env.local`
-
-Use **test keys** (`sk_test_...`) while building. Switch to **live keys** when you're ready to accept real payments.
-
-**Test card numbers:**
-- Success: `4242 4242 4242 4242`
-- Any future expiry, any CVC
-
----
-
-## 🌐 Deploy to Vercel (Free)
-
-1. Push this project to GitHub:
 ```bash
-git add .
-git commit -m "Initial build"
-git push
-```
-
-2. Go to https://vercel.com → **New Project** → Import your repo
-
-3. Add environment variables in Vercel dashboard:
-   - `STRIPE_SECRET_KEY`
-   - `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY`
-   - `NEXT_PUBLIC_SITE_URL` = `https://shiftwithai.co`
-
-4. Click **Deploy** — it's live in ~2 minutes
-
-5. In Namecheap, point your domain DNS to Vercel:
-   - Add a CNAME record: `www` → `cname.vercel-dns.com`
-   - Add an A record: `@` → `76.76.21.21`
-
----
-
-## 📁 Project Structure
-
-```
-shiftwithai/
-├── app/
-│   ├── page.tsx              # Main landing page
-│   ├── subscribe/page.tsx    # Checkout page
-│   ├── dashboard/page.tsx    # Member dashboard
-│   ├── api/
-│   │   └── create-checkout-session/route.ts  # Stripe API
-│   ├── layout.tsx
-│   └── globals.css
-├── .env.example
-└── README.md
+npm run build   # production build
+npm start       # serve the build
 ```
 
 ---
 
-## 💰 Revenue Math
+## Design system
 
-- 10 subscribers = $750/mo
-- 50 subscribers = $3,750/mo
-- 200 subscribers = $15,000/mo
-- 1,400 subscribers = $105,000/mo ← $100k/yr goal
+Dark-first on **Asphalt** with the warm flame palette. The one bold move is a
+**scroll-driven sunset → night** background (Amber → Flame → Ember → Desert
+Violet → Asphalt) with a stylized Sonoran mountain horizon and a flame-gradient
+sun that sets behind the range as you scroll. Everything stays disciplined
+around it. `prefers-reduced-motion` gets a static sunset.
 
-**Running costs:** ~$0/mo on Vercel free tier + domain ($10/yr) + Stripe 2.9% per transaction
+| Token | Hex | Role |
+|---|---|---|
+| Flame Core | `#FF7A28` | Primary orange — CTAs, links, accents |
+| Amber | `#FFC247` | Gradient start, highlights |
+| Ember | `#E22D17` | Gradient end, urgency |
+| Asphalt | `#0E0E11` | Primary dark background |
+| Ink | `#1C1C22` | Card / elevated surfaces |
+| Sand | `#F5F2EC` | Primary text on dark |
+| Ash | `#8B8B97` | Secondary text, captions |
+| Desert Violet | `#5B2D8E` | Sunset→night transition only |
+| Go Green | `#37D98B` | "Booking confirmed" success only |
+
+**Type:** Barlow Condensed (display) · IBM Plex Sans (body) · IBM Plex Mono
+(eyebrows / data / pricing). Loaded via `next/font` — self-hosted, no banned
+defaults.
 
 ---
 
-## 🔧 Next Steps After Launch
+## What the client still supplies
 
-1. Add email capture with Brevo (free up to 300 emails/day)
-2. Set up Stripe webhook to auto-grant dashboard access after payment
-3. Record actual course videos and embed with YouTube unlisted or Loom
-4. Add a blog for SEO (target "AI tools for [industry]" keywords)
-5. Set up social media auto-posting pipeline
+- **Logo SVGs** — primary (on Asphalt) and alternate (on Sand). Labeled slots
+  sit in the nav and footer (`app/components/Nav.tsx`, `Sections.tsx`).
+- **Real event photos** — every image is a clearly-labeled `REAL PHOTO:` slot
+  (`app/components/PhotoSlot.tsx`). No stock or AI imagery is used.
+- **Booking widget** — embed a Calendly or Square widget in the booking slot
+  (`app/components/BookingSection.tsx`). The Go Green instant-confirm state is
+  already designed.
+- **Google Reviews embed** — slot in the Real Events section.
+
+---
+
+## Structure
+
+```
+app/
+├── layout.tsx                # fonts + SEO metadata
+├── globals.css               # tokens, type primitives, buttons
+├── page.tsx                  # section assembly + JSON-LD
+└── components/
+    ├── SunsetBackground.tsx  # the scroll-driven signature
+    ├── Hero.tsx              # thesis + setting sun + horizon
+    ├── MountainHorizon.tsx   # stylized vector range
+    ├── Nav.tsx
+    ├── Pricing.tsx           # published tiers + price-anchor strip
+    ├── BookingSection.tsx    # widget slot + success state
+    ├── StickyBookBar.tsx     # persistent mobile Book bar
+    ├── Sections.tsx          # why-mobile, built-for, equipment, data,
+    │                         #   real-events, rig-owners, service area,
+    │                         #   what's-next, footer
+    ├── PhotoSlot.tsx         # labeled real-photo placeholder
+    └── Reveal.tsx            # scroll-reveal (reduced-motion aware)
+```
+
+---
+
+## Deploy
+
+Push to GitHub → import on Vercel → set `NEXT_PUBLIC_SITE_URL=https://sonoransims.com`
+→ deploy. Point the domain's DNS at Vercel.
