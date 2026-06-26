@@ -1,14 +1,51 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Reveal from "./Reveal";
 
 /**
- * Instant-booking affordance. The real deploy drops an embedded Calendly or
- * Square booking widget into the labeled slot; the success state (Go Green,
- * the only place the brand uses it) confirms instantly. The toggle below
- * previews that confirmed state for the client without faking a transaction.
+ * Instant-booking affordance.
+ *
+ * Set NEXT_PUBLIC_BOOKING_URL to go live:
+ *   - a Calendly link  → renders the inline Calendly widget
+ *   - any other URL    → renders it in a responsive iframe (e.g. Square)
+ * With no URL set we show a labeled placeholder plus a preview of the
+ * Go Green instant-confirm state, so the client can see the finished flow.
  */
+const BOOKING_URL = process.env.NEXT_PUBLIC_BOOKING_URL?.trim() || "";
+const isCalendly = /calendly\.com/i.test(BOOKING_URL);
+
+function CalendlyEmbed({ url }: { url: string }) {
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const id = "calendly-widget-script";
+    if (!document.getElementById(id)) {
+      const s = document.createElement("script");
+      s.id = id;
+      s.src = "https://assets.calendly.com/assets/external/widget.js";
+      s.async = true;
+      document.body.appendChild(s);
+    }
+    // Append brand colours to the Calendly URL so the widget matches the site.
+    const styled = new URL(url);
+    styled.searchParams.set("hide_gdpr_banner", "1");
+    styled.searchParams.set("background_color", "0E0E11");
+    styled.searchParams.set("text_color", "F5F2EC");
+    styled.searchParams.set("primary_color", "FF7A28");
+    if (ref.current) ref.current.dataset.url = styled.toString();
+  }, [url]);
+
+  return (
+    <div
+      ref={ref}
+      className="calendly-inline-widget overflow-hidden rounded-lg"
+      data-url={url}
+      style={{ minWidth: "320px", height: "660px" }}
+    />
+  );
+}
+
 export default function BookingSection() {
   const [confirmed, setConfirmed] = useState(false);
 
@@ -28,7 +65,20 @@ export default function BookingSection() {
 
         <Reveal>
           <div className="mt-12">
-            {confirmed ? (
+            {BOOKING_URL ? (
+              <div className="rounded-xl border border-sand/10 bg-ink/60 p-3 md:p-4">
+                {isCalendly ? (
+                  <CalendlyEmbed url={BOOKING_URL} />
+                ) : (
+                  <iframe
+                    title="Book your Sonoran Sims session"
+                    src={BOOKING_URL}
+                    className="h-[660px] w-full rounded-lg border-0"
+                    loading="lazy"
+                  />
+                )}
+              </div>
+            ) : confirmed ? (
               <div
                 className="rounded-xl border p-8 text-center md:p-12"
                 style={{
@@ -66,15 +116,16 @@ export default function BookingSection() {
               </div>
             ) : (
               <div className="rounded-xl border border-dashed border-flame/40 bg-ink/60 p-6 md:p-8">
-                {/* BOOKING WIDGET SLOT — embed Calendly / Square here */}
+                {/* BOOKING WIDGET SLOT — set NEXT_PUBLIC_BOOKING_URL to go live */}
                 <div className="flex min-h-[300px] flex-col items-center justify-center gap-5 rounded-lg border border-sand/10 bg-asphalt/60 p-8 text-center">
                   <p className="mono text-[0.7rem] uppercase tracking-[0.2em] text-ash">
                     Embedded booking widget · Calendly / Square
                   </p>
                   <p className="max-w-sm text-sm text-sand/70">
-                    Live date picker, tier selection, and deposit checkout drop
-                    in here. The button below previews the instant-confirm
-                    state.
+                    Set <span className="mono text-sand/90">NEXT_PUBLIC_BOOKING_URL</span>{" "}
+                    to your Calendly or Square link and the live date picker
+                    renders right here. The button below previews the
+                    instant-confirm state.
                   </p>
                   <button onClick={() => setConfirmed(true)} className="btn-flame">
                     Preview instant confirm

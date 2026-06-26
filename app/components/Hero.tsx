@@ -14,8 +14,10 @@ export default function Hero() {
     target: ref,
     offset: ["start start", "end start"],
   });
-  const sunY = useTransform(scrollYProgress, [0, 1], ["0%", "78%"]);
-  const sunOpacity = useTransform(scrollYProgress, [0, 0.7, 1], [1, 0.7, 0.15]);
+  // The sun sinks (not just fades) behind the range as the descent begins.
+  const sunY = useTransform(scrollYProgress, [0, 1], ["0%", "90%"]);
+  const sunOpacity = useTransform(scrollYProgress, [0, 0.75, 1], [1, 0.82, 0.4]);
+  const sunScale = useTransform(scrollYProgress, [0, 1], [1, 0.86]);
 
   return (
     <section
@@ -30,6 +32,7 @@ export default function Hero() {
         style={{
           y: reduce ? "30%" : sunY,
           opacity: reduce ? 0.85 : sunOpacity,
+          scale: reduce ? 0.92 : sunScale,
           background:
             "radial-gradient(circle at 50% 50%, #FFD46A 0%, #FF9A3D 38%, #FF7A28 58%, rgba(226,45,23,0) 72%)",
         }}
