@@ -7,7 +7,10 @@ import { IconArrowRight } from "./icons";
 export default function Hero() {
   return (
     <section className="hero" id="hero">
-      {/* z2: cars on the horizon, behind the headline (z3 via stacking) */}
+      {/* z1: the near desert floor the highway sits on (grounds the road) */}
+      <div className="hero-floor" aria-hidden="true" />
+
+      {/* z2: cars on the ground-level road, behind the headline (z3 via stacking) */}
       <VehicleHighway />
 
       <div className="hero__tag">{copy.hero.cornerTag}</div>

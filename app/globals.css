@@ -151,6 +151,7 @@ h1, h2, h3 {
   border-color: var(--line-2);
 }
 .btn--outline:hover { border-color: var(--flame); color: var(--amber); }
+.btn:disabled { opacity: .6; cursor: not-allowed; filter: none; transform: none; }
 
 /* 6. BACKDROP LAYERS -------------------------------------------------------- */
 /* The fixed sunset sits behind everything; content rides above at z-index:1. */
@@ -186,9 +187,18 @@ h1, h2, h3 {
   -webkit-mask-image: radial-gradient(ellipse 100% 70% at 50% 30%, #000 30%, transparent 85%);
           mask-image: radial-gradient(ellipse 100% 70% at 50% 30%, #000 30%, transparent 85%); }
 
-/* The vehicle highway (hero only). Cars rest on the road; aircraft fly above. */
+/* Desert floor: the near ground the highway sits on. Fades in at the horizon
+   (~72%) so the distant mountains blend into it, then becomes solid ground
+   toward the bottom. This is what makes the road read as GROUND, not sky. */
+.hero-floor { position: absolute; left: 0; right: 0; top: 72%; bottom: 0; z-index: 1;
+  pointer-events: none;
+  background: linear-gradient(180deg,
+    rgba(40,20,12,0) 0%, rgba(30,16,10,.72) 16%, #170f0a 52%, #0E0E11 100%); }
+
+/* The vehicle highway (hero only). Cars rest on the road at GROUND level
+   (~75% down, on the desert floor); aircraft fly high in the sky. */
 .vehicle-layer { position: absolute; inset: 0; z-index: 2; pointer-events: none; overflow: hidden; }
-.desert-road { position: absolute; left: -3%; right: -3%; top: 63.5%; height: 8.2%;
+.desert-road { position: absolute; left: -3%; right: -3%; top: 75%; height: 5.5%;
   -webkit-mask-image: linear-gradient(90deg, transparent, #000 13%, #000 87%, transparent);
           mask-image: linear-gradient(90deg, transparent, #000 13%, #000 87%, transparent); }
 .road-surface { position: absolute; inset: 0;
