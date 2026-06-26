@@ -187,18 +187,23 @@ h1, h2, h3 {
   -webkit-mask-image: radial-gradient(ellipse 100% 70% at 50% 30%, #000 30%, transparent 85%);
           mask-image: radial-gradient(ellipse 100% 70% at 50% 30%, #000 30%, transparent 85%); }
 
-/* Desert floor: the near ground the highway sits on. Fades in at the horizon
-   (~72%) so the distant mountains blend into it, then becomes solid ground
-   toward the bottom. This is what makes the road read as GROUND, not sky. */
-.hero-floor { position: absolute; left: 0; right: 0; top: 72%; bottom: 0; z-index: 1;
+/* Desert floor: the near ground the highway sits on. It goes fully OPAQUE
+   right at the horizon line (~80%), which is the base of the mountains — so no
+   mountain shows below it and the road reads as sitting on the ground at the
+   mountains' base. A short warm fade just above is atmospheric horizon haze.
+   The --horizon value is the single source of truth shared with the road. */
+:root { --horizon: 80%; }
+.hero-floor { position: absolute; left: 0; right: 0; top: 74%; bottom: 0; z-index: 1;
   pointer-events: none;
+  /* transparent at the top (mountains show), fully opaque ground by the 80%
+     horizon (the mountains' base), solid asphalt to the bottom */
   background: linear-gradient(180deg,
-    rgba(40,20,12,0) 0%, rgba(30,16,10,.72) 16%, #170f0a 52%, #0E0E11 100%); }
+    rgba(45,22,12,0) 0%, rgba(33,18,11,.7) 14%, #15100b 24%, #0E0E11 100%); }
 
-/* The vehicle highway (hero only). Cars rest on the road at GROUND level
-   (~75% down, on the desert floor); aircraft fly high in the sky. */
+/* The vehicle highway (hero only). Cars rest on the road AT THE MOUNTAINS' BASE
+   (top of the road == --horizon); aircraft fly high in the sky. */
 .vehicle-layer { position: absolute; inset: 0; z-index: 2; pointer-events: none; overflow: hidden; }
-.desert-road { position: absolute; left: -3%; right: -3%; top: 75%; height: 5.5%;
+.desert-road { position: absolute; left: -3%; right: -3%; top: var(--horizon); height: 5%;
   -webkit-mask-image: linear-gradient(90deg, transparent, #000 13%, #000 87%, transparent);
           mask-image: linear-gradient(90deg, transparent, #000 13%, #000 87%, transparent); }
 .road-surface { position: absolute; inset: 0;

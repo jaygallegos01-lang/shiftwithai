@@ -50,10 +50,10 @@ export default function VehicleHighway() {
       const h = w / s.ar;
       const VW = vLayer.clientWidth || window.innerWidth;
       const CH = vLayer.clientHeight || window.innerHeight;
-      // Ground vehicles rest on the road at GROUND level (wheels at ~78% of the
-      // hero height — must match the .desert-road position in globals.css).
+      // Ground vehicles rest on the road at the mountains' base (wheels at ~82%
+      // of the hero height — matches --horizon / .desert-road in globals.css).
       // Aircraft fly high in the sky (8-34% down) so they never touch the road.
-      const top = s.air ? rand(0.08, 0.34) * CH : CH * 0.78 - h + rand(-3, 3);
+      const top = s.air ? rand(0.08, 0.34) * CH : CH * 0.82 - h + rand(-3, 3);
       const dur = rand(s.dur[0], s.dur[1]);
       const blur = dur < 3.6 ? rand(0.9, 1.6) : rand(0.3, 0.8); // faster => more motion blur
       const op = s.air ? rand(0.62, 0.8) : rand(0.8, 0.94);
